@@ -11,8 +11,24 @@ function createUser() {
     
     return username;
   }
+
+function recordScore(user, score) {
+    const scores = JSON.parse(localStorage.getItem('scores')) || {};
+    scores[user] = score;
+    localStorage.setItem('scores', JSON.stringify(scores));
+}
   
-  module.exports = {
-    createUser
-  };
+function getTopScores() {
+    const scores = JSON.parse(localStorage.getItem('scores')) || {};
+    const sortedUsers = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+    const topUsers = sortedUsers.slice(0, 10);
+    const topScores = topUsers.map(user => ({ user, score: scores[user] }));
+    return topScores;
+}
+  
+module.exports = {
+    createUser,
+    recordScore,
+    getTopScores
+};
   
