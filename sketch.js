@@ -6,47 +6,57 @@ States:
 3 -> correct
 4 -> no answer
 5 -> wrong
-6 -> review
+6 -> results
 7 -> recommendations
 8 -> leaderboard
  */
 
+
 var state = 0
+var frameSpeed = 20;
+var timer = new BarTimer();
+var tvHeight = 1080;
+var tvWidth = 1920;
+timer.setTime(5, frameSpeed)
 
 function setup() {
-  let displayCanvas = createCanvas(windowWidth, windowHeight);
+  let displayCanvas = createCanvas(tvWidth, tvHeight);
   displayCanvas.parent("#canvas-container");
-  frameRate(3);
+  frameRate(frameSpeed);
 }
 
 function draw() {
   switch (state) {
     case 0:
       setStartPage();
+      timer.draw(x=400);
+      // if(newTimer.finished()){
+      //   state = 1;
+      // }
       break;
     case 1:
-      background(0);
+      setInstructions(0);
       break;
     case 2:
-      background(0);
+      setQuestion(0);
       break;
     case 3:
-      background(0);
+      setCorrect(0);
       break;
     case 4:
-      background(0);
+      setNoAnswer(0);
       break;
     case 5:
-      background(0);
+      setWrong(0);
       break;
     case 6:
-      background(0);
+      setResults(0);
       break;
     case 7:
-      background(0);
+      setRecommendations(0);
       break;
-    case 9:
-      background(0);
+    case 8:
+      setLeaderboard(0);
       break;
     default:
       break;
@@ -80,11 +90,11 @@ function setStartPage() {
   let h_margin = 60;
 
   // yellow
-  drawCircle(400, "#FFD154", windowWidth - 200, -30);
+  drawCircle(600, "#FFD154", tvWidth - 600, 0);
   // pink
-  drawCircle(400, "#FF8AA6", windowWidth + 40, 180);
+  drawCircle(600, "#FF8AA6", tvWidth - 600, 0);
   // orange
-  drawCircle(400, "#ffa776", windowWidth - 50, 0);
+  drawCircle(600, "#ffa776", tvWidth - 600, 0);
 
   writeText("Want to test your", "bold", "#000000", "Montserrat", 75, 10 + h_margin, 70 + v_margin);
   writeText("CS Knowledge?", "bold", "#000000", "Montserrat", 75, 40 + h_margin, 140 + v_margin);
