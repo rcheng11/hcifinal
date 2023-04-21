@@ -17,10 +17,12 @@ var frameSpeed = 20;
 var timer = new BarTimer();
 var tvHeight = 1080;
 var tvWidth = 1920;
+var img;
 timer.setTime(5, frameSpeed)
 
 function setup() {
   let displayCanvas = createCanvas(tvWidth, tvHeight);
+  img = createImg('https://i.ibb.co/QjF7Ssn/image-1.png');
   displayCanvas.parent("#canvas-container");
   frameRate(frameSpeed);
 }
@@ -35,28 +37,28 @@ function draw() {
       // }
       break;
     case 1:
-      setInstructions(0);
+      setInstructions();
       break;
     case 2:
-      setQuestion(0);
+      setQuestion();
       break;
     case 3:
-      setCorrect(0);
+      setCorrect();
       break;
     case 4:
-      setNoAnswer(0);
+      setNoAnswer();
       break;
     case 5:
-      setWrong(0);
+      setWrong();
       break;
     case 6:
-      setResults(0);
+      setResults();
       break;
     case 7:
-      setRecommendations(0);
+      setRecommendations();
       break;
     case 8:
-      setLeaderboard(0);
+      setLeaderboard();
       break;
     default:
       break;
@@ -109,6 +111,14 @@ function setStartPage() {
   drawCircle(600, "#FF8AA6", tvWidth - 600, 0);
   // orange
   drawCircle(600, "#ffa776", tvWidth - 600, 0);
+
+  writeText("Want to test your", "bold", "#000000", "Montserrat", 80, 10 + h_margin, 70 + v_margin);
+  writeText("CS knowledge?", "bold", "#000000", "Montserrat", 80, 40 + h_margin, 140 + v_margin);
+
+  writeText("Raise your hand to begin.", "normal", "#000000", "Montserrat", 50, 25 + h_margin, 225 + v_margin);
+  writeText("Keep it raised until the bar is full!", "normal", "#000000", "Montserrat", 40, 75 + h_margin, 700 + v_margin);
+
+  img.position(275 + h_margin, 300 + v_margin);
 
 }
 
