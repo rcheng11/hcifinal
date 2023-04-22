@@ -18,11 +18,11 @@ var timer = new BarTimer();
 var tvHeight = 1080;
 var tvWidth = 1920;
 var img;
-timer.setTime(5, frameSpeed)
+timer.setTime(2, frameSpeed);
 
 function setup() {
   let displayCanvas = createCanvas(tvWidth, tvHeight);
-  img = createImg('https://i.ibb.co/QjF7Ssn/image-1.png');
+  img = loadImage('https://i.ibb.co/QjF7Ssn/image-1.png');
   displayCanvas.parent("#canvas-container");
   frameRate(frameSpeed);
 }
@@ -31,10 +31,13 @@ function draw() {
   switch (state) {
     case 0:
       setStartPage();
-      timer.draw(x=400);
-      // if(newTimer.finished()){
-      //   state = 1;
-      // }
+      timer.length = 850;
+      timer.height = 70;
+      timer.setCoords(180, 680);
+      timer.draw();
+      if(timer.finished()){
+        state = 1;
+      }
       break;
     case 1:
       setInstructions();
@@ -102,24 +105,31 @@ function setStartPage() {
   state = 0;
   background("#fffff");
   textFont("Helvetica");
-  let v_margin = 60;
-  let h_margin = 60;
+  let v_margin = 120;
+  let h_margin = 100;
 
   // yellow
-  drawCircle(600, "#FFD154", tvWidth - 600, 0);
+  drawCircle(800, "#FFD154", tvWidth - 325, -85);
   // pink
-  drawCircle(600, "#FF8AA6", tvWidth - 600, 0);
+  drawCircle(800, "#FF8AA6", tvWidth + 40, 340);
   // orange
-  drawCircle(600, "#ffa776", tvWidth - 600, 0);
+  drawCircle(800, "#ffa776", tvWidth - 50, 50);
+  // blue
+  drawCircle(650, "#74A9FF", tvWidth - 550, tvHeight + 100);
 
-  writeText("Want to test your", "bold", "#000000", "Montserrat", 80, 10 + h_margin, 70 + v_margin);
-  writeText("CS knowledge?", "bold", "#000000", "Montserrat", 80, 40 + h_margin, 140 + v_margin);
+  // cpsc text
+  writeText("CPSC 484", "bold", "#000000", "Montserrat", 60, tvWidth - 710, tvHeight - 70)
 
-  writeText("Raise your hand to begin.", "normal", "#000000", "Montserrat", 50, 25 + h_margin, 225 + v_margin);
-  writeText("Keep it raised until the bar is full!", "normal", "#000000", "Montserrat", 40, 75 + h_margin, 700 + v_margin);
+  // title text
+  writeText("Want to test your", "bold", "#000000", "Montserrat", 120, 10 + h_margin, 70 + v_margin);
+  writeText("CS knowledge?", "bold", "#000000", "Montserrat", 120, 60 + h_margin, 200 + v_margin);
 
-  img.position(275 + h_margin, 300 + v_margin);
+  // subtext
+  writeText("Raise your hand to begin.", "normal", "#000000", "Montserrat", 65, 120 + h_margin, 300 + v_margin);
+  writeText("Keep it raised until the bar is full!", "normal", "#000000", "Montserrat", 40, 200 + h_margin, 700 + v_margin);
 
+  let imgSize = 70;
+  image(img, 350 + h_margin, 350 + v_margin, 4*imgSize, 3*imgSize);
 }
 
 function setInstructions(){

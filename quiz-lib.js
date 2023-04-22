@@ -32,20 +32,26 @@ class BarTimer{
         this.maxFrames = seconds * frameSpeed;
         this.leftFrames = this.maxFrames;
     }
+    setCoords(x, y){
+        this.x = x;
+        this.y = y;
+    }
     draw(){
         strokeWeight(2);
         stroke("#1E1E1E");
         noFill();
-        rect(this.x, this.y, this.length, this.height, 10*(this.length/100));
+        rect(this.x, this.y, this.length, this.height, 10*(this.length/100)**2);
 
         noStroke();
         fill("#FFA767");
         // draw inner rectange
-        rect(this.x + this.length * 0.025, 
-            this.y + this.height * 0.1,
-            this.length * 0.95 * -1 * (Math.cos(Math.PI * (1 - (this.leftFrames/this.maxFrames))) - 1) / 2,
-            this.height * 0.8, 
-            20);
+        var paddingY = 0.03*this.y
+        var paddingX = 0.2*this.x
+        rect(this.x + paddingX/2, 
+            this.y + paddingY/2,
+            (this.length - paddingX) * -1 * (Math.cos(Math.PI * (1 - (this.leftFrames/this.maxFrames))) - 1) / 2,
+            this.height - paddingY, 
+            10*(this.length/100)**2);
 
         if(this.leftFrames > 0){
             // decrease the frames
