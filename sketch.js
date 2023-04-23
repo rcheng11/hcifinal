@@ -13,17 +13,20 @@ States:
 
 
 // global variables
-var state = 0;
-var frameSpeed = 20;
-var questionTimeAlloted = 30;
-var quizFramesMax = questionTimeAlloted * frameSpeed;
-var quizFramesLeft = quizFramesMax;
+var state = 2;
+var frameSpeed = 30;
 var points = 0;
 var tvHeight = 1080;
 var tvWidth = 1920;
 var img;
 var timerSpeed = 2;
 var responseBuffer = 3;
+
+// quiz object variables
+var questionTimeAlloted = 30;
+var quizFramesMax = questionTimeAlloted * frameSpeed;
+var quizFramesLeft = quizFramesMax;
+var quizHandler = new Quiz();
 
 // timer object
 var timer = new BarTimer();
@@ -53,8 +56,8 @@ function draw() {
   switch (state) {
     // START PAGE
     case 0:
+      // render page
       setStartPage();
-
       if(timer.finished()){
         timer.setTime(timerSpeed, frameSpeed);
         state = 1;
@@ -70,18 +73,27 @@ function draw() {
       break;
     // QUESTION
     case 2:
-      setQuestion();
+      setQuestion(quizHandler);
       // note: quizFramesMax are decremented in the setPage functions
       // selected an answer
       if(timer.finished()){
         timer.setTime(timerSpeed, frameSpeed);
         if(lastKey == E_KEY){
           quizFramesLeft = quizFramesMax;
+          // initialize new questions for quiz
+          quizHandler = new Quiz();
+          // reset selections of each question obj to "None"
+          quizHandler.resetQuestions();
           state = 0;
         }
         else{
           quizFramesLeft = responseBuffer * frameSpeed;
-          state = 3;
+          if(quizHandler.getCurrentQuestion().isCorrect()){
+            state = 3;
+          }
+          else{
+            state = 5;
+          }
         }
       }
       // timer runs out, no answer selected
@@ -96,7 +108,13 @@ function draw() {
       if(quizFramesLeft <= 0){
         timer.setTime(timerSpeed, frameSpeed);
         quizFramesLeft = quizFramesMax;
-        state = 2;
+        quizHandler.nextQuestion();
+        if(quizHandler.isFinished()){
+          state = 6;
+        }
+        else{
+          state = 2;
+        }
       }
       break;
     // NO CHOICE MADE
@@ -105,7 +123,13 @@ function draw() {
       if(quizFramesLeft <= 0){
         timer.setTime(timerSpeed, frameSpeed);
         quizFramesLeft = quizFramesMax;
-        state = 2;
+        quizHandler.nextQuestion();
+        if(quizHandler.isFinished()){
+          state = 6;
+        }
+        else{
+          state = 2;
+        }
       }
       break;
     // WRONG CHOICE
@@ -114,7 +138,13 @@ function draw() {
       if(quizFramesLeft <= 0){
         timer.setTime(timerSpeed, frameSpeed);
         quizFramesLeft = quizFramesMax;
-        state = 2;
+        quizHandler.nextQuestion();
+        if(quizHandler.isFinished()){
+          state = 6;
+        }
+        else{
+          state = 2;
+        }
       }
       break;
     // RESULTS
@@ -138,6 +168,11 @@ function draw() {
       setLeaderboard();
       if(timer.finished()){
         timer.setTime(timerSpeed, frameSpeed);
+        // initialize new questions for quiz
+        quizHandler = new Quiz();
+        // reset selections of each question obj to "None"
+        quizHandler.resetQuestions();
+
         state = 0;
       }
       break;
@@ -172,6 +207,20 @@ function writeTextCenter(str = "Placeholder", style = "normal", color = "#000000
   textSize(size);
   textAlign(CENTER);
   text(str, x, y);
+}
+
+function writeTextBox(str = "Placeholder", style = "normal", color = "#000000", font = "Montserrat", size = 25, x = 20, y = 40, x2 = 1000, y2 = 100){
+  if(style == "normal"){
+    textStyle(NORMAL);
+  }
+  else if(style == "bold"){
+    textStyle(BOLD);
+  }
+  fill(color);
+  textFont(font);
+  textSize(size);
+  textAlign(LEFT);
+  text(str, x, y, x2, y2);
 }
 
 function drawCircle(size = 30, color = "#a8a8a8", x = 0, y = 0){
@@ -298,7 +347,7 @@ function setInstructions(){
 
 }
 
-function setQuestion(){
+function setQuestion(quiz){
   state = 2;
   background("#fffff");
   let v_margin = 60;
@@ -312,24 +361,26 @@ function setQuestion(){
   drawCircle(500, "#FFD154", tvWidth - 1350, 1100);
 
   // Question
-  writeText("Question 1/5", "bold", "#000000", "Montserrat", 100, 40 + h_margin, 100 + v_margin);
-  writeText("Lorem ipsum dolor blah blah blah", "normal", "#000000", "Montserrat", 40, 40 + h_margin, 200 + v_margin);
+  let currQ = quiz.getCurrentQuestion();
+
+  writeText(`Question ${quiz.getCurrentQuestionNumber()}/5`, "bold", "#000000", "Montserrat", 100, 40 + h_margin, 100 + v_margin);
+  writeTextBox(currQ.question, "normal", "#000000", "Montserrat",35, 40 + h_margin, 200 + v_margin, 600, 800);
 
   // Option A
-  writeText("Option A", "bold", "#000000", "Montserrat", 60, 1100 + h_margin, 100 + v_margin);
-  writeText("Hold right arm up", "normal", "#000000", "Montserrat", 40, 1060 + h_margin, 150 + v_margin);
+  writeTextCenter(currQ.choices[0], "bold", "#000000", "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+  writeTextCenter("Hold right arm up", "normal", "#000000", "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
 
   // Option B
-  writeText("Option B", "bold", "#000000", "Montserrat", 60, 800 + h_margin, 400 + v_margin);
-  writeText("Hold right arm left", "normal", "#000000", "Montserrat", 40, 750 + h_margin, 450 + v_margin);
+  writeTextCenter(currQ.choices[1], "bold", "#000000", "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+  writeTextCenter("Hold right arm left", "normal", "#000000", "Montserrat", 40, 920 + h_margin, 450 + v_margin);
 
   // Option C
-  writeText("Option C", "bold", "#000000", "Montserrat", 60, 1400 + h_margin, 400 + v_margin);
-  writeText("Hold right arm right", "normal", "#000000", "Montserrat", 40, 1340 + h_margin, 450 + v_margin);
+  writeTextCenter(currQ.choices[2], "bold", "#000000", "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+  writeTextCenter("Hold right arm right", "normal", "#000000", "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
 
   // Option D
-  writeText("Option D", "bold", "#000000", "Montserrat", 60, 1100 + h_margin, 700 + v_margin);
-  writeText("Hold right arm down", "normal", "#000000", "Montserrat", 40, 1040 + h_margin, 750 + v_margin);
+  writeTextCenter(currQ.choices[3], "bold", "#000000", "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+  writeTextCenter("Hold right arm down", "normal", "#000000", "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Timer1
   timer.setSize(300, 40);
@@ -339,29 +390,35 @@ function setQuestion(){
   locD = { x: 1150, y: 850}
   locE = { x: 420, y: 1020}
 
+
+  // exit
+  if(keyIsDown(E_KEY) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(FOUR))){
+    timer.setCoords(locE.x, locE.y);
+    currQ.setSelection("None");
+    timer.draw();
+  }
   // option A
-  if(keyIsDown(ONE)){
+  else if(keyIsDown(ONE) && !(keyIsDown(E_KEY) || keyIsDown(TWO) || keyIsDown(THREE) || keyIsDown(FOUR))){
     timer.setCoords(locA.x, locA.y);
+    currQ.setSelection(0);
     timer.draw();
   }
   // option B
-  else if(keyIsDown(TWO)){
+  else if(keyIsDown(TWO) && !(keyIsDown(ONE) || keyIsDown(E_KEY) || keyIsDown(THREE) || keyIsDown(FOUR))){
     timer.setCoords(locB.x, locB.y);
+    currQ.setSelection(1);
     timer.draw();
   }
   // option C
-  else if(keyIsDown(THREE)){
+  else if(keyIsDown(THREE) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(E_KEY) || keyIsDown(FOUR))){
     timer.setCoords(locC.x, locC.y);
+    currQ.setSelection(2);
     timer.draw();
   }
   // option D
-  else if(keyIsDown(FOUR)){
+  else if(keyIsDown(FOUR) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(THREE) || keyIsDown(E_KEY))){
     timer.setCoords(locD.x, locD.y);
-    timer.draw();
-  }
-  // exit
-  else if(keyIsDown(E_KEY)){
-    timer.setCoords(locE.x, locE.y);
+    currQ.setSelection(3);
     timer.draw();
   }
   else{
@@ -392,25 +449,27 @@ function setCorrect(){
   // yellow
   drawCircle(500, "#FFD154", tvWidth - 1350, 1100);
 
+  let currQ = quizHandler.getCurrentQuestion();
+  let selection = currQ.getSelection();
+
   // Feedback
   writeText("Correct!", "bold", "#000000", "Montserrat", 150, 40 + h_margin, 350 + v_margin);
   writeText("+5000 Pts", "bold", "#000000", "Montserrat", 100, 40 + h_margin, 450 + v_margin);
-
   // Option A
-  writeText("Option A", "bold", "#CACACA", "Montserrat", 60, 1100 + h_margin, 100 + v_margin);
-  writeText("Hold right arm up", "normal", "#CACACA", "Montserrat", 40, 1060 + h_margin, 150 + v_margin);
+  writeTextCenter(currQ.choices[0], "bold", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+  writeTextCenter("Hold right arm up", "normal", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
 
   // Option B
-  writeText("Option B", "bold", "#CACACA", "Montserrat", 60, 800 + h_margin, 400 + v_margin);
-  writeText("Hold right arm left", "normal", "#CACACA", "Montserrat", 40, 750 + h_margin, 450 + v_margin);
+  writeTextCenter(currQ.choices[1], "bold", ((selection == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+  writeTextCenter("Hold right arm left", "normal", ((selection == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
 
   // Option C
-  writeText("Option C", "bold", "#CACACA", "Montserrat", 60, 1400 + h_margin, 400 + v_margin);
-  writeText("Hold right arm right", "normal", "#CACACA", "Montserrat", 40, 1340 + h_margin, 450 + v_margin);
+  writeTextCenter(currQ.choices[2], "bold", ((selection == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+  writeTextCenter("Hold right arm right", "normal", ((selection == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
 
   // Option D
-  writeText("Option D", "bold", "#A7D8AC", "Montserrat", 60, 1100 + h_margin, 700 + v_margin);
-  writeText("Hold right arm down", "normal", "#A7D8AC", "Montserrat", 40, 1040 + h_margin, 750 + v_margin);
+  writeTextCenter(currQ.choices[3], "bold", ((selection == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+  writeTextCenter("Hold right arm down", "normal", ((selection == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
@@ -435,21 +494,23 @@ function setNoAnswer(){
   writeText("selected", "bold", "#000000", "Montserrat", 150, 40 + h_margin, 400 + v_margin);
   writeText("+0 Points", "bold", "#000000", "Montserrat", 100, 40 + h_margin, 515 + v_margin);
 
-  // Option A
-  writeText("Option A", "bold", "#CACACA", "Montserrat", 60, 1100 + h_margin, 100 + v_margin);
-  writeText("Hold right arm up", "normal", "#CACACA", "Montserrat", 40, 1060 + h_margin, 150 + v_margin);
-
-  // Option B
-  writeText("Option B", "bold", "#CACACA", "Montserrat", 60, 800 + h_margin, 400 + v_margin);
-  writeText("Hold right arm left", "normal", "#CACACA", "Montserrat", 40, 750 + h_margin, 450 + v_margin);
-
-  // Option C
-  writeText("Option C", "bold", "#CACACA", "Montserrat", 60, 1400 + h_margin, 400 + v_margin);
-  writeText("Hold right arm right", "normal", "#CACACA", "Montserrat", 40, 1340 + h_margin, 450 + v_margin);
-
-  // Option D
-  writeText("Option D", "bold", "#CACACA", "Montserrat", 60, 1100 + h_margin, 700 + v_margin);
-  writeText("Hold right arm down", "normal", "#CACACA", "Montserrat", 40, 1040 + h_margin, 750 + v_margin);
+  let currQ = quizHandler.getCurrentQuestion()
+  let answer = currQ.getAnswer();
+   // Option A
+   writeTextCenter(currQ.choices[0], "bold", ((answer == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
+ 
+   // Option B
+   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
+ 
+   // Option C
+   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
+ 
+   // Option D
+   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
@@ -474,21 +535,23 @@ function setWrong(){
   writeText("Wrong!", "bold", "#000000", "Montserrat", 150, 40 + h_margin, 350 + v_margin);
   writeText("+0 Points", "bold", "#000000", "Montserrat", 100, 40 + h_margin, 450 + v_margin);
 
-  // Option A
-  writeText("Option A", "bold", "#CACACA", "Montserrat", 60, 1100 + h_margin, 100 + v_margin);
-  writeText("Hold right arm up", "normal", "#CACACA", "Montserrat", 40, 1060 + h_margin, 150 + v_margin);
-
-  // Option B
-  writeText("Option B", "bold", "#CACACA", "Montserrat", 60, 800 + h_margin, 400 + v_margin);
-  writeText("Hold right arm left", "normal", "#CACACA", "Montserrat", 40, 750 + h_margin, 450 + v_margin);
-
-  // Option C
-  writeText("Option C", "bold", "#CACACA", "Montserrat", 60, 1400 + h_margin, 400 + v_margin);
-  writeText("Hold right arm right", "normal", "#CACACA", "Montserrat", 40, 1340 + h_margin, 450 + v_margin);
-
-  // Option D
-  writeText("Option D", "bold", "#DF5454", "Montserrat", 60, 1100 + h_margin, 700 + v_margin);
-  writeText("Hold right arm down", "normal", "#DF5454", "Montserrat", 40, 1040 + h_margin, 750 + v_margin);
+  let currQ = quizHandler.getCurrentQuestion()
+  let answer = currQ.getAnswer();
+   // Option A
+   writeTextCenter(currQ.choices[0], "bold", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
+ 
+   // Option B
+   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
+ 
+   // Option C
+   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
+ 
+   // Option D
+   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
