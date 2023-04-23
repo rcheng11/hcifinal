@@ -179,6 +179,9 @@ function updateFruitCoordinates() {
 
 function sendWristCommand(command) {
   switch (command) {
+  	case 0:
+	  direction = 'exit'
+		break;
     case 74:
       if (direction !== 'right') {
         direction = 'left';

@@ -36,14 +36,13 @@ class Api {
 			
 			var right_wrist_x = (frame.people[0].joints[14].position.x - right_shoulder_x) * -1;
 			var right_wrist_y = (frame.people[0].joints[14].position.y - right_shoulder_y) * -1;
-			/*
-		    var left_wrist_x = (frame.people[0].joints[7].position.x - pelvis_x) * -1;
-		    var left_wrist_y = (frame.people[0].joints[7].position.y - pelvis_y) * -1;
-		    var left_wrist_z = (frame.people[0].joints[7].position.z - pelvis_z) * -1;
-			*/
 			
-			console.log('x' + right_wrist_x)
-			console.log('y: ' + right_wrist_y)
+			var left_shoulder_x = frame.people[0].joints[5].position.x;
+			var left_shoulder_y = frame.people[0].joints[5].position.y;
+			
+		    var left_wrist_x = (frame.people[0].joints[7].position.x - left_shoulder_x) * -1;
+		    var left_wrist_y = (frame.people[0].joints[7].position.y - left_shoulder_y) * -1;
+	
 		
 		/*
 			if (right_wrist_x > 0) {
@@ -65,7 +64,9 @@ class Api {
 		      return command;
 		    }
  */
-		    if (right_wrist_x > 0) {
+			if (left_wrist_y > 0 && right_wrist_y > 0) {
+				command = 0;
+			} else if (right_wrist_x > 0) {
 		      if (right_wrist_y > 300) {
 		        command = 73; // UP
 		      } else if (right_wrist_y < -300) {
