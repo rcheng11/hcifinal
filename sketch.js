@@ -16,16 +16,17 @@ States:
 var state = 2;
 var frameSpeed = 20;
 var questionTimeAlloted = 30;
-var quizFrames = questionTimeAlloted * frameSpeed;
-var quizFramesLeft = quizFrames;
+var quizFramesMax = questionTimeAlloted * frameSpeed;
+var quizFramesLeft = quizFramesMax;
 var points = 0;
 var tvHeight = 1080;
 var tvWidth = 1920;
 var img;
+var timerSpeed = 2;
 
 // timer object
 var timer = new BarTimer();
-timer.setTime(2, frameSpeed);
+timer.setTime(timerSpeed, frameSpeed);
 
 // JS keycodes
 const SPACE = 32;
@@ -49,7 +50,7 @@ function draw() {
       setStartPage();
 
       if(timer.finished()){
-        timer.setTime(3, frameSpeed);
+        timer.setTime(timerSpeed, frameSpeed);
         state = 1;
       }
       break;
@@ -57,57 +58,75 @@ function draw() {
     case 1:
       setInstructions();
       if(timer.finished()){
-        timer.setTime(3, frameSpeed);
+        timer.setTime(timerSpeed, frameSpeed);
         state = 2;
       }
       break;
+    // QUESTION
     case 2:
       setQuestion();
+      // note: quizFramesMax are decremented in the setPage functions
+      // selected an answer
       if(timer.finished()){
-        timer.setTime(3, frameSpeed);
-        state = 2;
+        timer.setTime(timerSpeed, frameSpeed);
+        state = 3;
+        quizFramesLeft = 3 * frameSpeed;
+      }
+      // timer runs out, no answer selected
+      else if(quizFramesLeft <= 0){
+        state = 4;
+        quizFramesLeft = 3 * frameSpeed;
       }
       break;
+    // CORRECT CHOICE
     case 3:
       setCorrect();
-      if(timer.finished()){
-        timer.setTime(3, frameSpeed);
+      if(quizFramesLeft <= 0){
+        timer.setTime(timerSpeed, frameSpeed);
+        quizFramesLeft = quizFramesMax;
         state = 2;
       }
       break;
+    // NO CHOICE MADE
     case 4:
       setNoAnswer();
-      if(timer.finished()){
-        timer.setTime(3, frameSpeed);
+      if(quizFramesLeft <= 0){
+        timer.setTime(timerSpeed, frameSpeed);
+        quizFramesLeft = quizFramesMax;
         state = 2;
       }
       break;
+    // WRONG CHOICE
     case 5:
       setWrong();
-      if(timer.finished()){
-        timer.setTime(3, frameSpeed);
+      if(quizFramesLeft <= 0){
+        timer.setTime(timerSpeed, frameSpeed);
+        quizFramesLeft = quizFramesMax;
         state = 2;
       }
       break;
+    // RESULTS
     case 6:
       setResults();
       if(timer.finished()){
-        timer.setTime(3, frameSpeed);
-        state = 2;
+        timer.setTime(timerSpeed, frameSpeed);
+        state = 7;
       }
       break;
+    // RECS
     case 7:
       setRecommendations();
       if(timer.finished()){
-        timer.setTime(3, frameSpeed);
-        state = 2;
+        timer.setTime(timerSpeed, frameSpeed);
+        state = 8;
       }
       break;
+    // LEADERBOARD
     case 8:
       setLeaderboard();
       if(timer.finished()){
-        timer.setTime(3, frameSpeed);
-        state = 2;
+        timer.setTime(timerSpeed, frameSpeed);
+        state = 0;
       }
       break;
     default:
@@ -337,13 +356,11 @@ function setQuestion(){
     timer.reset();
   }
 
-  timeLeft = Math.round(quizFramesLeft / frameSpeed);
   // Quiz Timer
+  timeLeft = Math.round(quizFramesLeft / frameSpeed);
   writeText(timeLeft + "s", "bold", "#000000", "Montserrat", 100, tvWidth - 1825, 975);
   quizFramesLeft--;
-  if(timeLeft <= 0){
-    state = 4;
-  }
+  
   // Exit
   writeText("Exit", "bold", "#000000", "Montserrat", 60, tvWidth - 1410, 950);
   writeText("Raise left arm.", "normal", "#000000", "Montserrat", 40, tvWidth - 1490, 1000);
@@ -382,6 +399,11 @@ function setCorrect(){
   // Option D
   writeText("Option D", "bold", "#A7D8AC", "Montserrat", 60, 1100 + h_margin, 700 + v_margin);
   writeText("Hold right arm down", "normal", "#A7D8AC", "Montserrat", 40, 1040 + h_margin, 750 + v_margin);
+
+  // Quiz Timer
+  timeLeft = Math.round(quizFramesLeft / frameSpeed);
+  writeText(timeLeft + "s", "bold", "#000000", "Montserrat", 100, tvWidth - 1825, 975);
+  quizFramesLeft--;
 }
 function setNoAnswer(){
   state = 4;
@@ -416,7 +438,13 @@ function setNoAnswer(){
   // Option D
   writeText("Option D", "bold", "#CACACA", "Montserrat", 60, 1100 + h_margin, 700 + v_margin);
   writeText("Hold right arm down", "normal", "#CACACA", "Montserrat", 40, 1040 + h_margin, 750 + v_margin);
+
+  // Quiz Timer
+  timeLeft = Math.round(quizFramesLeft / frameSpeed);
+  writeText(timeLeft + "s", "bold", "#000000", "Montserrat", 100, tvWidth - 1825, 975);
+  quizFramesLeft--;
 }
+
 function setWrong(){
   state = 5;
   background("#fffff");
@@ -449,6 +477,11 @@ function setWrong(){
   // Option D
   writeText("Option D", "bold", "#DF5454", "Montserrat", 60, 1100 + h_margin, 700 + v_margin);
   writeText("Hold right arm down", "normal", "#DF5454", "Montserrat", 40, 1040 + h_margin, 750 + v_margin);
+
+  // Quiz Timer
+  timeLeft = Math.round(quizFramesLeft / frameSpeed);
+  writeText(timeLeft + "s", "bold", "#000000", "Montserrat", 100, tvWidth - 1825, 975);
+  quizFramesLeft--;
 }
 function setResults(){
   let v_margin = 200;
