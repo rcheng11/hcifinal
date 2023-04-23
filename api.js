@@ -31,56 +31,58 @@ class Api {
 		    var pelvis_y = frame.people[0].joints[0].position.y;
 		    var pelvis_z = frame.people[0].joints[0].position.z;
 			
-			var right_shoulder_z = frame.people[0].joints[12].position.z;
+			var right_shoulder_x = frame.people[0].joints[12].position.x;
 			var right_shoulder_y = frame.people[0].joints[12].position.y;
 			
-			var right_wrist_z = frame.people[0].joints[14].position.z - right_shoulder_z;
-			var right_wrist_y = frame.people[0].joints[14].position.y - right_shoulder_y;
+			var right_wrist_x = (frame.people[0].joints[14].position.x - right_shoulder_x) * -1;
+			var right_wrist_y = (frame.people[0].joints[14].position.y - right_shoulder_y) * -1;
 			/*
 		    var left_wrist_x = (frame.people[0].joints[7].position.x - pelvis_x) * -1;
 		    var left_wrist_y = (frame.people[0].joints[7].position.y - pelvis_y) * -1;
 		    var left_wrist_z = (frame.people[0].joints[7].position.z - pelvis_z) * -1;
 			*/
 			
-			console.log(right_wrist_z)
+			console.log('x' + right_wrist_x)
 			console.log('y: ' + right_wrist_y)
+		
+		/*
+			if (right_wrist_x > 0) {
+				command = 76;
+			} else if (right_wrist_x < 0) {
+				command = 74;
+			}
 			
 			if (right_wrist_y > 0) {
-				command = 'right';
+				command = 73
+			} else if (right_wrist_y < 0) {
+				command = 75
 			}
+			*/
 			
-			if (right_wrist_y < 0) {
-				command = 'left';
-			}
-			
-			if (right_wrist_z > 0) {
-				command = 'up'
-			}
-			
-			if (right_wrist_z < 0) {
-				command = 'down'
-			}
 			
 			/*
-			
-		    if (left_wrist_z < 100) {
+		    if (right_wrist_z < 100) {
 		      return command;
 		    }
-
-		    if (left_wrist_x < 200 && left_wrist_x > -200) {
-		      if (left_wrist_y > 500) {
+ */
+		    if (right_wrist_x > 0) {
+		      if (right_wrist_y > 300) {
 		        command = 73; // UP
-		      } else if (left_wrist_y < 100) {
+		      } else if (right_wrist_y < -300) {
 		        command = 75; // DOWN
+		      } else {
+				  command = 76; //RIGHT
 		      }
-		    } else if (left_wrist_y < 500 && left_wrist_y > 100) {
-		      if (left_wrist_x > 200) {
-		        command = 76; // RIGHT
-		      } else if (left_wrist_x < -200) {
-		        command = 74; // LEFT
+		    } else if (right_wrist_y < 0) {
+		      if (right_wrist_y > 300) {
+		        command = 73; // UP
+		      } else if (right_wrist_y < -300) {
+		        command = 75; // DOWN
+		      } else {
+				  command = 74; // LEFT
 		      }
 		    }
-			*/
+			
 		    return command;
 		  }
 		};
