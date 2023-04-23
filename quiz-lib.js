@@ -3,10 +3,21 @@ class Question{
     takes in a question string, an array of string choices,
     and the index of the correct answer in the array
      */
-    constructor(question, choices, index_of_answer){
+    constructor(question, topic, choices, index_of_answer){
         this.question = question;
         this.choices = choices;
         this.index_of_answer = index_of_answer;
+        this.topic = topic;
+        this.playerSelection = "None";
+    }
+    isCorrect(option){
+        if(index_of_answer == option){
+            return true;
+        }
+        return false;
+    }
+    resetSelection(){
+        this.playerSelection = "None"
     }
 }
 
@@ -36,7 +47,13 @@ class BarTimer{
         this.x = x;
         this.y = y;
     }
+    setSize(length, height){
+        this.length = length;
+        this.height = height;
+    }
     draw(){
+        textAlign(LEFT)
+
         strokeWeight(2);
         stroke("#1E1E1E");
         noFill();
@@ -45,8 +62,8 @@ class BarTimer{
         noStroke();
         fill("#FFA767");
         // draw inner rectange
-        var paddingY = 0.03*this.y
-        var paddingX = 0.2*this.x
+        var paddingY = 0.25*this.height
+        var paddingX = 0.04*this.length
         rect(this.x + paddingX/2, 
             this.y + paddingY/2,
             (this.length - paddingX) * -1 * (Math.cos(Math.PI * (1 - (this.leftFrames/this.maxFrames))) - 1) / 2,
@@ -57,6 +74,17 @@ class BarTimer{
             // decrease the frames
             this.leftFrames -= 1;
         }
+    }
+    drawStatic(){
+        textAlign(LEFT)
+
+        strokeWeight(2);
+        stroke("#1E1E1E");
+        noFill();
+        rect(this.x, this.y, this.length, this.height, 10*(this.length/100)**2);
+    }
+    reset(){
+        this.leftFrames = this.maxFrames;
     }
     finished(){
         return this.leftFrames == 0;
