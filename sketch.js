@@ -13,7 +13,7 @@ States:
 
 
 // global variables
-var state = 0;
+var state = 7;
 var frameSpeed = 30;
 var points = 0;
 var tvHeight = 1080;
@@ -163,7 +163,7 @@ function draw() {
     case 7:
       setRecommendations();
       if(timer.finished()){
-        timer.setTime(timerSpeed, frameSpeed);
+        timer.setTime(5, frameSpeed);
         state = 8;
       }
       break;
@@ -623,7 +623,12 @@ function setRecommendations(){
   timer.length = 200;
   timer.height = 30;
   timer.setCoords(tvWidth - 355, 290);
-  timer.draw();
+  if(keyIsDown(SPACE)){
+    timer.draw();
+  }
+  else{
+    timer.drawStatic();
+  }
 
   // results text
   writeText("Recommendations", "bold", "#000000", "Montserrat", 120, h_margin, 50 + v_margin)
@@ -682,4 +687,9 @@ function setLeaderboard(){
   writeText("2949", "bold", "#000000", "Montserrat", 115, 1460, 860 + v_margin);
 
   drawStars(3, "#000000", 450, 910);
+
+  timer.length = 200;
+  timer.height = 30;
+  timer.setCoords(tvWidth - 355, 100);
+  timer.draw();
 }
