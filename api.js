@@ -30,10 +30,39 @@ class Api {
 		    var pelvis_x = frame.people[0].joints[0].position.x;
 		    var pelvis_y = frame.people[0].joints[0].position.y;
 		    var pelvis_z = frame.people[0].joints[0].position.z;
+			
+			var right_shoulder_z = frame.people[0].joints[12].position.z;
+			var right_shoulder_y = frame.people[0].joints[12].position.y;
+			
+			var right_wrist_z = frame.people[0].joints[14].position.z - right_shoulder_z;
+			var right_wrist_y = frame.people[0].joints[14].position.y - right_shoulder_y;
+			/*
 		    var left_wrist_x = (frame.people[0].joints[7].position.x - pelvis_x) * -1;
 		    var left_wrist_y = (frame.people[0].joints[7].position.y - pelvis_y) * -1;
 		    var left_wrist_z = (frame.people[0].joints[7].position.z - pelvis_z) * -1;
-
+			*/
+			
+			console.log(right_wrist_z)
+			console.log('y: ' + right_wrist_y)
+			
+			if (right_wrist_y > 0) {
+				command = 'right';
+			}
+			
+			if (right_wrist_y < 0) {
+				command = 'left';
+			}
+			
+			if (right_wrist_z > 0) {
+				command = 'up'
+			}
+			
+			if (right_wrist_z < 0) {
+				command = 'down'
+			}
+			
+			/*
+			
 		    if (left_wrist_z < 100) {
 		      return command;
 		    }
@@ -51,6 +80,7 @@ class Api {
 		        command = 74; // LEFT
 		      }
 		    }
+			*/
 		    return command;
 		  }
 		};
