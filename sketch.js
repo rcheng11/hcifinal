@@ -13,7 +13,7 @@ States:
 
 
 // global variables
-var state = 2;
+var state = 0;
 var frameSpeed = 30;
 var points = 0;
 var tvHeight = 1080;
@@ -27,6 +27,7 @@ var questionTimeAlloted = 30;
 var quizFramesMax = questionTimeAlloted * frameSpeed;
 var quizFramesLeft = quizFramesMax;
 var quizHandler = new Quiz();
+var lastQuestionScore = 0;
 
 // timer object
 var timer = new BarTimer();
@@ -87,13 +88,16 @@ function draw() {
           state = 0;
         }
         else{
-          quizFramesLeft = responseBuffer * frameSpeed;
           if(quizHandler.getCurrentQuestion().isCorrect()){
+            lastQuestionScore = quizHandler.calcScore(quizFramesLeft, quizFramesMax, timer.maxFrames, frameSpeed);
+            console.log(quizFramesLeft);
+            console.log(quizFramesMax);
             state = 3;
           }
           else{
             state = 5;
           }
+          quizFramesLeft = responseBuffer * frameSpeed;
         }
       }
       // timer runs out, no answer selected
@@ -454,7 +458,7 @@ function setCorrect(){
 
   // Feedback
   writeText("Correct!", "bold", "#000000", "Montserrat", 150, 40 + h_margin, 350 + v_margin);
-  writeText("+5000 Pts", "bold", "#000000", "Montserrat", 100, 40 + h_margin, 450 + v_margin);
+  writeText(`+ ${lastQuestionScore} Pts`, "bold", "#000000", "Montserrat", 100, 40 + h_margin, 450 + v_margin);
   // Option A
   writeTextCenter(currQ.choices[0], "bold", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
   writeTextCenter("Hold right arm up", "normal", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
@@ -537,21 +541,22 @@ function setWrong(){
 
   let currQ = quizHandler.getCurrentQuestion()
   let answer = currQ.getAnswer();
+  let selection = currQ.getSelection();
    // Option A
-   writeTextCenter(currQ.choices[0], "bold", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
-   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
+   writeTextCenter(currQ.choices[0], "bold", ((answer == 0) ? "#A7D8AC" : (selection == 0) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? "#A7D8AC" : (selection == 0) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
  
    // Option B
-   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
-   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
+   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? "#A7D8AC" : (selection == 1) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? "#A7D8AC" : (selection == 1) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
  
    // Option C
-   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
-   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
+   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? "#A7D8AC" : (selection == 2) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? "#A7D8AC" : (selection == 2) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
  
    // Option D
-   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
-   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
+   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? "#A7D8AC" : (selection == 3) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? "#A7D8AC" : (selection == 3) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
@@ -576,7 +581,12 @@ function setResults(){
   timer.length = 200;
   timer.height = 30;
   timer.setCoords(tvWidth - 355, 290);
-  timer.draw();
+  if(keyIsDown(SPACE)){
+    timer.draw();
+  }
+  else{
+    timer.drawStatic();
+  }
 
   // results text
   writeText("You scored a 2/5!", "bold", "#000000", "Montserrat", 120, h_margin, 50 + v_margin)

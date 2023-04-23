@@ -93,11 +93,11 @@ class Quiz{
         return this.score;
     }
     calcScore(quizFrames, maxQuizFrames, barFrames, frameSpeed){
-        let timeLeft = quizFrames / framespeed;
+        let timeLeft = quizFrames / frameSpeed;
         let maxTime = maxQuizFrames / frameSpeed;
         let barTime = barFrames / frameSpeed;
         let maxPoints = 1000;
-        return Math.round(maxPoints * (timeLeft/maxTime + barTime/maxTime));
+        return Math.round(maxPoints * (timeLeft/maxTime + 2 * barTime/maxTime));
     }
     getCurrentQuestion(){
         return this.currentQuestion;
