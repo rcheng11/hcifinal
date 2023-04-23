@@ -72,11 +72,11 @@ class Api {
 		};
 		
 		return frames;
-	}
+	};
 	
 	
 
-	static function createUser() {
+	static createUser() {
 	    const animals = ['cat', 'dog', 'hamster', 'rabbit', 'parrot'];
 	    const randomIndex = Math.floor(Math.random() * animals.length);
 	    const animalName = animals[randomIndex];
@@ -88,16 +88,16 @@ class Api {
 	    localStorage.setItem('users', JSON.stringify(users));
     
 
-    return username;
+    	return username;
   }
 
-	static function recordScore(user, score) {
+	static recordScore(user, score) {
 	    const scores = JSON.parse(localStorage.getItem('scores')) || {};
 	    scores[user] = score;
 	    localStorage.setItem('scores', JSON.stringify(scores));
 	}
   
-	static function getTopScores() {
+	static getTopScores() {
 	    const scores = JSON.parse(localStorage.getItem('scores')) || {};
 	    const sortedUsers = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
 	    const topUsers = sortedUsers.slice(0, 10);
@@ -105,6 +105,8 @@ class Api {
 	    return topScores;
 	}
 }
+
+
 
 
 
