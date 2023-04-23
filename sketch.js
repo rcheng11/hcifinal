@@ -13,7 +13,7 @@ States:
 
 
 // global variables
-var state = 2;
+var state = 0;
 var frameSpeed = 20;
 var questionTimeAlloted = 30;
 var quizFramesMax = questionTimeAlloted * frameSpeed;
@@ -23,6 +23,7 @@ var tvHeight = 1080;
 var tvWidth = 1920;
 var img;
 var timerSpeed = 2;
+var responseBuffer = 3;
 
 // timer object
 var timer = new BarTimer();
@@ -35,6 +36,11 @@ const TWO = 50;
 const THREE = 51;
 const FOUR = 52;
 const E_KEY = 69;
+var lastKey = SPACE;
+
+function keyPressed(){
+  lastKey = keyCode;
+}
 
 function setup() {
   let displayCanvas = createCanvas(tvWidth, tvHeight);
@@ -69,13 +75,19 @@ function draw() {
       // selected an answer
       if(timer.finished()){
         timer.setTime(timerSpeed, frameSpeed);
-        state = 3;
-        quizFramesLeft = 3 * frameSpeed;
+        if(lastKey == E_KEY){
+          quizFramesLeft = quizFramesMax;
+          state = 0;
+        }
+        else{
+          quizFramesLeft = responseBuffer * frameSpeed;
+          state = 3;
+        }
       }
       // timer runs out, no answer selected
       else if(quizFramesLeft <= 0){
         state = 4;
-        quizFramesLeft = 3 * frameSpeed;
+        quizFramesLeft = responseBuffer * frameSpeed;
       }
       break;
     // CORRECT CHOICE
@@ -282,7 +294,7 @@ function setInstructions(){
 
   writeTextCenter("At the end, your performance will be ranked, and you", "normal", "#000000", "Montserrat", 50, tvWidth/2, 750 + v_margin);
   writeTextCenter("will be provided with a list of resources to learn more.", "normal", "#000000", "Montserrat", 50, tvWidth/2, 800 + v_margin);
-
+  writeTextCenter("Raise any arm to begin!", "bold", "#000000", "Montserrat", 50, tvWidth/2, 850 + v_margin);
 
 }
 
