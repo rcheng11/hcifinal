@@ -73,7 +73,7 @@ class Api {
 		      } else {
 				  command = 76; //RIGHT
 		      }
-		    } else if (right_wrist_y < 0) {
+		    } else if (right_wrist_x < 0) {
 		      if (right_wrist_y > 300) {
 		        command = 73; // UP
 		      } else if (right_wrist_y < -300) {
