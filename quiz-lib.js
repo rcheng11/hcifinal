@@ -189,6 +189,28 @@ class Quiz{
             questions[i].resetSelection();
         }
     }
+    getQuestionsText(){
+        let arr = this.questions.map(question => question.question);
+        let output = "";
+        for(let i = 0; i < arr.length; i++){
+            if(arr[i].length > 70){
+                output += `${i + 1}. ${arr[i].slice(0,40)}... \n`;
+            }
+            else{
+                output += `${i + 1}. ${arr[i]}\n`;
+            }
+        }
+        return output;
+    }
+    getUserSelections(){
+        return this.questions.map(function(question){
+            if(question.playerSelection == "None"){
+                return "No answer chosen.";
+                console.log("hi");
+            }
+            return question.choices[question.playerSelection];
+        });
+    }
 }
 
 class BarTimer{

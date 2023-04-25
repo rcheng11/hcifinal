@@ -18,17 +18,17 @@ States:
 
 
 // global variables
-var state = 0;
+var state = 7;
 var frameSpeed = 60;
-var points = 0;
 var tvHeight = 1080;
 var tvWidth = 1920;
 var img;
 var timerSpeed = 3.5;
 var responseBuffer = 3;
+var score = 0;
 
 // quiz object variables
-var questionTimeAlloted = 1000;
+var questionTimeAlloted = 45;
 var quizFramesMax = questionTimeAlloted * frameSpeed;
 var quizFramesLeft = quizFramesMax;
 var quizHandler = new Quiz();
@@ -45,6 +45,8 @@ const TWO = 50;
 const THREE = 51;
 const FOUR = 52;
 const E_KEY = 69;
+const GREEN = "#A7D8AC";
+const RED = "#DF5454";
 var lastKey = SPACE;
 
 function keyPressed(){
@@ -105,10 +107,11 @@ function draw() {
         else{
           if(quizHandler.getCurrentQuestion().isCorrect()){
             lastQuestionScore = quizHandler.calcScore(quizFramesLeft, quizFramesMax, timer.maxFrames, frameSpeed);
-            // state = 3;
+            score += lastQuestionScore;
+            state = 3;
           }
           else{
-            // state = 5;
+            state = 5;
           }
           quizFramesLeft = responseBuffer * frameSpeed;
         }
@@ -189,7 +192,7 @@ function draw() {
         quizHandler = new Quiz();
         // reset selections of each question obj to "None"
         quizHandler.resetQuestions();
-
+        score = 0;
         state = 0;
       }
       break;
@@ -199,6 +202,7 @@ function draw() {
 }
 
 function writeText(str = "Placeholder", style = "normal", color = "#000000", font = "Montserrat", size = 25, x = 20, y = 40){
+  noStroke()
   if(style == "normal"){
     textStyle(NORMAL);
   }
@@ -213,6 +217,7 @@ function writeText(str = "Placeholder", style = "normal", color = "#000000", fon
 }
 
 function writeTextCenter(str = "Placeholder", style = "normal", color = "#000000", font = "Montserrat", size = 25, x = tvWidth/2, y = 40){
+  noStroke()
   if(style == "normal"){
     textStyle(NORMAL);
   }
@@ -227,6 +232,7 @@ function writeTextCenter(str = "Placeholder", style = "normal", color = "#000000
 }
 
 function writeTextBox(str = "Placeholder", style = "normal", color = "#000000", font = "Montserrat", size = 25, x = 20, y = 40, x2 = 1000, y2 = 100){
+  noStroke()
   if(style == "normal"){
     textStyle(NORMAL);
   }
@@ -476,20 +482,20 @@ function setCorrect(){
   writeText("Correct!", "bold", "#000000", "Montserrat", 150, 40 + h_margin, 350 + v_margin);
   writeText(`+ ${lastQuestionScore} Pts`, "bold", "#000000", "Montserrat", 100, 40 + h_margin, 450 + v_margin);
   // Option A
-  writeTextCenter(currQ.choices[0], "bold", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
-  writeTextCenter("Hold right arm up", "normal", ((selection == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
+  writeTextCenter(currQ.choices[0], "bold", ((selection == 0) ? GREEN : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+  writeTextCenter("Hold right arm up", "normal", ((selection == 0) ? GREEN : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
 
   // Option B
-  writeTextCenter(currQ.choices[1], "bold", ((selection == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
-  writeTextCenter("Hold right arm left", "normal", ((selection == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
+  writeTextCenter(currQ.choices[1], "bold", ((selection == 1) ? GREEN : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+  writeTextCenter("Hold right arm left", "normal", ((selection == 1) ? GREEN : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
 
   // Option C
-  writeTextCenter(currQ.choices[2], "bold", ((selection == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
-  writeTextCenter("Hold right arm right", "normal", ((selection == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
+  writeTextCenter(currQ.choices[2], "bold", ((selection == 2) ? GREEN : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+  writeTextCenter("Hold right arm right", "normal", ((selection == 2) ? GREEN : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
 
   // Option D
-  writeTextCenter(currQ.choices[3], "bold", ((selection == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
-  writeTextCenter("Hold right arm down", "normal", ((selection == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
+  writeTextCenter(currQ.choices[3], "bold", ((selection == 3) ? GREEN : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+  writeTextCenter("Hold right arm down", "normal", ((selection == 3) ? GREEN : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
@@ -517,20 +523,20 @@ function setNoAnswer(){
   let currQ = quizHandler.getCurrentQuestion()
   let answer = currQ.getAnswer();
    // Option A
-   writeTextCenter(currQ.choices[0], "bold", ((answer == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
-   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
+   writeTextCenter(currQ.choices[0], "bold", ((answer == 0) ? GREEN : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? GREEN : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
  
    // Option B
-   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
-   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
+   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? GREEN : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? GREEN : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
  
    // Option C
-   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
-   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
+   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? GREEN : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? GREEN : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
  
    // Option D
-   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
-   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? "#A7D8AC" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
+   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? GREEN : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? GREEN : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
@@ -559,20 +565,20 @@ function setWrong(){
   let answer = currQ.getAnswer();
   let selection = currQ.getSelection();
    // Option A
-   writeTextCenter(currQ.choices[0], "bold", ((answer == 0) ? "#A7D8AC" : (selection == 0) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
-   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? "#A7D8AC" : (selection == 0) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
+   writeTextCenter(currQ.choices[0], "bold", ((answer == 0) ? GREEN : (selection == 0) ?  RED : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 100 + v_margin);
+   writeTextCenter("Hold right arm up", "normal", ((answer == 0) ? GREEN : (selection == 0) ?  RED : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 150 + v_margin);
  
    // Option B
-   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? "#A7D8AC" : (selection == 1) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
-   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? "#A7D8AC" : (selection == 1) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
+   writeTextCenter(currQ.choices[1], "bold", ((answer == 1) ? GREEN : (selection == 1) ?  RED : "#CACACA"), "Montserrat", 60, 920 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm left", "normal", ((answer == 1) ? GREEN : (selection == 1) ?  RED : "#CACACA"), "Montserrat", 40, 920 + h_margin, 450 + v_margin);
  
    // Option C
-   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? "#A7D8AC" : (selection == 2) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
-   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? "#A7D8AC" : (selection == 2) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
+   writeTextCenter(currQ.choices[2], "bold", ((answer == 2) ? GREEN : (selection == 2) ?  RED : "#CACACA"), "Montserrat", 60, 1520 + h_margin, 400 + v_margin);
+   writeTextCenter("Hold right arm right", "normal", ((answer == 2) ? GREEN : (selection == 2) ?  RED : "#CACACA"), "Montserrat", 40, 1520 + h_margin, 450 + v_margin);
  
    // Option D
-   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? "#A7D8AC" : (selection == 3) ?  "#DF5454" : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
-   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? "#A7D8AC" : (selection == 3) ?  "#DF5454" : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
+   writeTextCenter(currQ.choices[3], "bold", ((answer == 3) ? GREEN : (selection == 3) ?  RED : "#CACACA"), "Montserrat", 60, 1220 + h_margin, 700 + v_margin);
+   writeTextCenter("Hold right arm down", "normal", ((answer == 3) ? GREEN : (selection == 3) ?  RED : "#CACACA"), "Montserrat", 40, 1220 + h_margin, 750 + v_margin);
 
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
@@ -597,7 +603,7 @@ function setResults(){
   timer.length = 200;
   timer.height = 30;
   timer.setCoords(tvWidth - 355, 290);
-  if(keyIsDown(SPACE)|| direction == "up"){
+  if(keyIsDown(SPACE) || direction == "up"){
     timer.draw();
   }
   else{
@@ -605,26 +611,27 @@ function setResults(){
   }
 
   // results text
-  writeText("You scored a 2/5!", "bold", "#000000", "Montserrat", 120, h_margin, 50 + v_margin)
-  writeText("Questions", "bold", "#000000", "Montserrat", 80, 45 + h_margin, 250 + v_margin)
+  writeText(`Final Score: ${score}`, "bold", "#000000", "Montserrat", 120, h_margin, 50 + v_margin)
+  writeText("Questions", "bold", "#000000", "Montserrat", 80, 45 + h_margin, 200 + v_margin)
   writeText("Your Answers", "bold", "#000000", "Montserrat", 80, tvWidth/2 - 135, 250 + v_margin)
 
-  let questions = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"];
-  let answers = ["Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5"]
+  let questions = quizHandler.getQuestionsText();
+  let questionRaw = quizHandler.questions;
+  let answers = quizHandler.getUserSelections();
   // questions
-  for(var i = 0; i < questions.length; i++){
-    writeText((i + 1) + ". " + questions[i], "normal", "#000000", "Montserrat", 40, 65 + h_margin, 300 + v_margin + 80*(i + 0.5))
-  }
+  writeTextBox(questions, "normal", "#000000", "Montserrat", 40, h_margin + 70, v_margin + 250, 600, 1000)
 
   // answers
   for(var i = 0; i < answers.length; i++){
-    writeText((i + 1) + ". " + answers[i], "normal", "#000000", "Montserrat", 40, tvWidth/2 - 100, 300 + v_margin + 80*(i + 0.5))
+    writeText((i + 1) + ". " + answers[i], "normal", questionRaw[i].isCorrect() ? GREEN : questionRaw[i].playerSelection == "None" ? "#CACACA" : RED, "Montserrat", 40, tvWidth/2 - 100, 300 + v_margin + 80*(i + 0.5))
   }
 }
+
 function setRecommendations(){
   let v_margin = 200;
   let h_margin = 90;
   background("#fffff");
+
 
   // pink
   drawCircle(400, "#FF8AA6", tvWidth - 250, 250)
@@ -651,16 +658,87 @@ function setRecommendations(){
   writeText("Classes", "bold", "#000000", "Montserrat", 80, 45 + h_margin, 250 + v_margin)
   writeText("Resources", "bold", "#000000", "Montserrat", 80, tvWidth/2 - 135, 250 + v_margin)
 
-  let questions = ["CPSC 484", "CPSC 223"];
-  let answers = ["Github Internship", "Fireship (Youtube)"]
+  let questionsRaw = quizHandler.questions;
+  let classes = [];
+  let resources = [];
+  console.log(questionsRaw.length)
+  for(let i = 0; i < questionsRaw.length; i++){
+    switch (questionsRaw[i].topic){
+      case "Object Oriented Programming":
+          if(questionsRaw[i].isCorrect()){
+            classes.push("CPSC 439");
+            resources.push("OOP Tutorials by Freecodecamp");
+          }
+          else{
+            classes.push("CPSC 327");
+            resources.push("OOP Tutorials by Freecodecamp");
+          }
+      case "Web Development":
+        if(questionsRaw[i].isCorrect()){
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+        else{
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+      case "Computer Hardware":
+        if(questionsRaw[i].isCorrect()){
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+        else{
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+      case "Databases":
+        if(questionsRaw[i].isCorrect()){
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+        else{
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");      
+        }
+      case "Artificial Intelligence":
+        if(questionsRaw[i].isCorrect()){
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+        else{
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");        
+        }
+      case "Algorithms":
+        if(questionsRaw[i].isCorrect()){
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+        else{
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");       
+        }
+      case "Data Structures":
+        if(questionsRaw[i].isCorrect()){
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+        else{
+          classes.push("CPSC 327");
+          resources.push("OOP Tutorials by Freecodecamp");
+        }
+      default:
+    }
+  }
+  console.log(classes);
   // questions
-  for(var i = 0; i < questions.length; i++){
-    writeText((i + 1) + ". " + questions[i], "normal", "#000000", "Montserrat", 40, 65 + h_margin, 300 + v_margin + 80*(i + 0.5))
+  for(var i = 0; i < classes.length; i++){
+    writeText((i + 1) + ". " + classes[i], "normal", "#000000", "Montserrat", 40, 65 + h_margin, 300 + v_margin + 80*(i + 0.5))
   }
 
   // answers
-  for(var i = 0; i < answers.length; i++){
-    writeText((i + 1) + ". " + answers[i], "normal", "#000000", "Montserrat", 40, tvWidth/2 - 100, 300 + v_margin + 80*(i + 0.5))
+  for(var i = 0; i < resources.length; i++){
+    writeText((i + 1) + ". " + resources[i], "normal", "#000000", "Montserrat", 40, tvWidth/2 - 100, 300 + v_margin + 80*(i + 0.5))
   }
 }
 function setLeaderboard(){

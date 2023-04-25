@@ -133,7 +133,7 @@ class Api {
 	static getTopScores() {
 	    const scores = JSON.parse(localStorage.getItem('scores')) || {};
 	    const sortedUsers = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
-	    const topUsers = sortedUsers.slice(0, 10);
+	    const topUsers = sortedUsers.slice(0, 5);
 	    const topScores = topUsers.map(user => ({ user, score: scores[user] }));
 	    return topScores;
 	}
