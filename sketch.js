@@ -1,3 +1,8 @@
+// Start API
+var direction = Api.startConnection();
+var directionArr = ["x","y"]
+var armChange = false;
+
 /*
 States:
 0 -> start page
@@ -13,17 +18,17 @@ States:
 
 
 // global variables
-var state = 7;
-var frameSpeed = 30;
+var state = 0;
+var frameSpeed = 60;
 var points = 0;
 var tvHeight = 1080;
 var tvWidth = 1920;
 var img;
-var timerSpeed = 2;
+var timerSpeed = 3.5;
 var responseBuffer = 3;
 
 // quiz object variables
-var questionTimeAlloted = 30;
+var questionTimeAlloted = 1000;
 var quizFramesMax = questionTimeAlloted * frameSpeed;
 var quizFramesLeft = quizFramesMax;
 var quizHandler = new Quiz();
@@ -54,6 +59,16 @@ function setup() {
 }
 
 function draw() {
+  if(directionArr.length < 2){
+    directionArr.push(direction);
+  }
+  else{
+    directionArr.shift();
+    directionArr.push(direction);
+  }
+  armChange = directionArr[0] != directionArr[1];
+  console.log(armChange);
+  
   switch (state) {
     // START PAGE
     case 0:
@@ -85,17 +100,15 @@ function draw() {
           quizHandler = new Quiz();
           // reset selections of each question obj to "None"
           quizHandler.resetQuestions();
-          state = 0;
+          // state = 0;
         }
         else{
           if(quizHandler.getCurrentQuestion().isCorrect()){
             lastQuestionScore = quizHandler.calcScore(quizFramesLeft, quizFramesMax, timer.maxFrames, frameSpeed);
-            console.log(quizFramesLeft);
-            console.log(quizFramesMax);
-            state = 3;
+            // state = 3;
           }
           else{
-            state = 5;
+            // state = 5;
           }
           quizFramesLeft = responseBuffer * frameSpeed;
         }
@@ -298,7 +311,7 @@ function setStartPage() {
   // timer
   timer.setSize(850, 70)
   timer.setCoords(180, 680);
-  if(keyIsDown(SPACE)){
+  if(keyIsDown(SPACE) || direction == "up"){
     timer.draw()
   }
   else{
@@ -327,7 +340,7 @@ function setInstructions(){
   
   timer.setSize(200, 30);
   timer.setCoords(tvWidth - 340, 130);
-  if(keyIsDown(SPACE)){
+  if(keyIsDown(SPACE) || direction == "up"){
     timer.draw();
   }
   else{
@@ -396,31 +409,31 @@ function setQuestion(quiz){
 
 
   // exit
-  if(keyIsDown(E_KEY) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(FOUR))){
+  if((keyIsDown(E_KEY) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(FOUR))) || direction == "exit"){
     timer.setCoords(locE.x, locE.y);
     currQ.setSelection("None");
     timer.draw();
   }
   // option A
-  else if(keyIsDown(ONE) && !(keyIsDown(E_KEY) || keyIsDown(TWO) || keyIsDown(THREE) || keyIsDown(FOUR))){
+  else if( (keyIsDown(ONE) && !(keyIsDown(E_KEY) || keyIsDown(TWO) || keyIsDown(THREE) || keyIsDown(FOUR))) || direction == "up"){
     timer.setCoords(locA.x, locA.y);
     currQ.setSelection(0);
     timer.draw();
   }
   // option B
-  else if(keyIsDown(TWO) && !(keyIsDown(ONE) || keyIsDown(E_KEY) || keyIsDown(THREE) || keyIsDown(FOUR))){
+  else if((keyIsDown(TWO) && !(keyIsDown(ONE) || keyIsDown(E_KEY) || keyIsDown(THREE) || keyIsDown(FOUR))) || direction == "left"){
     timer.setCoords(locB.x, locB.y);
     currQ.setSelection(1);
     timer.draw();
   }
   // option C
-  else if(keyIsDown(THREE) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(E_KEY) || keyIsDown(FOUR))){
+  else if((keyIsDown(THREE) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(E_KEY) || keyIsDown(FOUR))) || direction == "right"){
     timer.setCoords(locC.x, locC.y);
     currQ.setSelection(2);
     timer.draw();
   }
   // option D
-  else if(keyIsDown(FOUR) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(THREE) || keyIsDown(E_KEY))){
+  else if((keyIsDown(FOUR) && !(keyIsDown(ONE) || keyIsDown(TWO) || keyIsDown(THREE) || keyIsDown(E_KEY))) || direction == "down"){
     timer.setCoords(locD.x, locD.y);
     currQ.setSelection(3);
     timer.draw();
@@ -429,6 +442,9 @@ function setQuestion(quiz){
     timer.reset();
   }
 
+  if(armChange){
+    timer.reset();
+  }
   // Quiz Timer
   timeLeft = Math.round(quizFramesLeft / frameSpeed);
   writeText(timeLeft + "s", "bold", "#000000", "Montserrat", 100, tvWidth - 1825, 975);
@@ -581,7 +597,7 @@ function setResults(){
   timer.length = 200;
   timer.height = 30;
   timer.setCoords(tvWidth - 355, 290);
-  if(keyIsDown(SPACE)){
+  if(keyIsDown(SPACE)|| direction == "up"){
     timer.draw();
   }
   else{
@@ -623,7 +639,7 @@ function setRecommendations(){
   timer.length = 200;
   timer.height = 30;
   timer.setCoords(tvWidth - 355, 290);
-  if(keyIsDown(SPACE)){
+  if(keyIsDown(SPACE) || direction == "up"){
     timer.draw();
   }
   else{
@@ -692,4 +708,33 @@ function setLeaderboard(){
   timer.height = 30;
   timer.setCoords(tvWidth - 355, 100);
   timer.draw();
+}
+
+function sendWristCommand(command) {
+  switch (command) {
+  	case 0:
+	  direction = 'exit'
+		break;
+    case 74:
+      if (direction !== 'right') {
+        direction = 'left';
+      }
+      break;
+    case 76:
+      if (direction !== 'left') {
+        direction = 'right';
+      }
+      break;
+    case 73:
+      if (direction !== 'down') {
+        direction = 'up';
+      }
+      break;
+    case 75:
+      if (direction !== 'up') {
+        direction = 'down';
+      }
+      break;
+  }
+  return direction;
 }
