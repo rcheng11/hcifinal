@@ -110,11 +110,13 @@ class Api {
 	
 
 	static createUser() {
+      const adjectives = ["funny", "silly", "goofy", "stern", "wacky", "sly", "cranky", "happy", "sad", "giddy", "pensive"]
 	    const animals = ['cat', 'dog', 'hamster', 'rabbit', 'parrot'];
 	    const randomIndex = Math.floor(Math.random() * animals.length);
 	    const animalName = animals[randomIndex];
+      const adjective = adjectives[Math.floor(Math.random() * adjectives.length)]
 	    const randomNum = Math.floor(Math.random() * 1000);
-	    const username = `${animalName}${randomNum}`;
+	    const username = `${adjective}.${animalName}${randomNum}`;
     
 	    const users = JSON.parse(localStorage.getItem('users')) || [];
 	    users.push(username);
@@ -123,7 +125,7 @@ class Api {
 
     	return username;
   }
-
+  // recordScore(createUser(), 5)
 	static recordScore(user, score) {
 	    const scores = JSON.parse(localStorage.getItem('scores')) || {};
 	    scores[user] = score;
@@ -138,4 +140,3 @@ class Api {
 	    return topScores;
 	}
 }
-

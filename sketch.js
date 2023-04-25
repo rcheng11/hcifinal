@@ -18,7 +18,7 @@ States:
 
 
 // global variables
-var state = 0;
+var state = 6;
 var frameSpeed = 60;
 var tvHeight = 1080;
 var tvWidth = 1920;
@@ -33,6 +33,8 @@ var quizFramesMax = questionTimeAlloted * frameSpeed;
 var quizFramesLeft = quizFramesMax;
 var quizHandler = new Quiz();
 var lastQuestionScore = 0;
+var classes = [];
+var resources = [];
 
 // timer object
 var timer = new BarTimer();
@@ -181,6 +183,7 @@ function draw() {
       setRecommendations();
       if(timer.finished()){
         timer.setTime(5, frameSpeed);
+        Api.recordScore(Api.createUser(), score);
         state = 8;
       }
       break;
@@ -194,6 +197,8 @@ function draw() {
         // reset selections of each question obj to "None"
         quizHandler.resetQuestions();
         score = 0;
+        classes = [];
+        resources = [];
         state = 0;
       }
       break;
@@ -620,7 +625,7 @@ function setResults(){
   let questionRaw = quizHandler.questions;
   let answers = quizHandler.getUserSelections();
   // questions
-  writeTextBox(questions, "normal", "#000000", "Montserrat", 40, h_margin + 70, v_margin + 250, 600, 1000)
+  writeTextBox(questions, "normal", "#000000", "Montserrat", 35, h_margin + 70, v_margin + 250, 600, 1000)
 
   // answers
   for(var i = 0; i < answers.length; i++){
@@ -642,7 +647,7 @@ function setRecommendations(){
   drawCircle(600, "#FFA767", tvWidth, tvHeight - 200)
 
   // pink circle text
-  writeTextCenter("Go to recs", "bold", "#000000", "Montserrat", 50, tvWidth - 255, 225);
+  writeTextCenter("Go to Board", "bold", "#000000", "Montserrat", 50, tvWidth - 255, 225);
   writeTextCenter("(Raise any arm)", "bold", "#000000", "Montserrat", 30, tvWidth - 255, 260);
   timer.length = 200;
   timer.height = 30;
@@ -660,83 +665,84 @@ function setRecommendations(){
   writeText("Resources", "bold", "#000000", "Montserrat", 80, tvWidth/2 - 135, 250 + v_margin)
 
   let questionsRaw = quizHandler.questions;
-  let classes = [];
-  let resources = [];
-  for(let i = 0; i < questionsRaw.length; i++){
-    switch (questionsRaw[i].topic){
-      case "Object Oriented Programming":
+  if(classes.length < 5 || resources.length < 5){
+    for(let i = 0; i < questionsRaw.length; i++){
+      switch (questionsRaw[i].topic){
+        case "Object Oriented Programming":
+            if(questionsRaw[i].isCorrect()){
+              classes.push("CPSC 439");
+              resources.push("OOP Challenges by Hackerrank");
+            }
+            else{
+              classes.push("CPSC 327");
+              resources.push("OOP Tutorial by Freecodecamp");
+            }
+        case "Web Development":
           if(questionsRaw[i].isCorrect()){
             classes.push("CPSC 439");
-            resources.push("OOP Tutorials by Freecodecamp");
+            resources.push("Codewell");
           }
           else{
-            classes.push("CPSC 327");
-            resources.push("OOP Tutorials by Freecodecamp");
+            classes.push("CPSC 419");
+            resources.push("Fullstack Academy");
           }
-      case "Web Development":
-        if(questionsRaw[i].isCorrect()){
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-        else{
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-      case "Computer Hardware":
-        if(questionsRaw[i].isCorrect()){
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-        else{
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-      case "Databases":
-        if(questionsRaw[i].isCorrect()){
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-        else{
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");      
-        }
-      case "Artificial Intelligence":
-        if(questionsRaw[i].isCorrect()){
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-        else{
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");        
-        }
-      case "Algorithms":
-        if(questionsRaw[i].isCorrect()){
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-        else{
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");       
-        }
-      case "Data Structures":
-        if(questionsRaw[i].isCorrect()){
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-        else{
-          classes.push("CPSC 327");
-          resources.push("OOP Tutorials by Freecodecamp");
-        }
-      default:
+        case "Computer Hardware":
+          if(questionsRaw[i].isCorrect()){
+            classes.push("EENG 200");
+            resources.push("Yale CEID");
+          }
+          else{
+            classes.push("APHY 110");
+            resources.push("How Technology Works by DK");
+          }
+        case "Databases":
+          if(questionsRaw[i].isCorrect()){
+            classes.push("CPSC 440");
+            resources.push("Google Cloud - Database Engineer");
+          }
+          else{
+            classes.push("CPSC 437");
+            resources.push("Meta - Intro to Databases");      
+          }
+        case "Artificial Intelligence":
+          if(questionsRaw[i].isCorrect()){
+            classes.push("S&DS 431");
+            resources.push("Google AI Courses");
+          }
+          else{
+            classes.push("CPSC 470");
+            resources.push("Google AI Courses");        
+          }
+        case "Algorithms":
+          if(questionsRaw[i].isCorrect()){
+            classes.push("CPSC 483");
+            resources.push("HackerRank - Algorithms"); 
+          }
+          else{
+            classes.push("CPSC 365");
+            resources.push("MIT Intro to Algos Problems");     
+          }
+        case "Data Structures":
+          if(questionsRaw[i].isCorrect()){
+            classes.push("CPSC 323");
+            resources.push("HackerRank - Data Structures");
+          }
+          else{
+            classes.push("CPSC 223");
+            resources.push("Medium - Classic Data Structure Problems");
+          }
+        default:
+      }
     }
   }
+  
   // questions
-  for(var i = 0; i < classes.length; i++){
+  for(var i = 0; i < 5; i++){
     writeText((i + 1) + ". " + classes[i], "normal", "#000000", "Montserrat", 40, 65 + h_margin, 300 + v_margin + 80*(i + 0.5))
   }
 
   // answers
-  for(var i = 0; i < resources.length; i++){
+  for(var i = 0; i < 5; i++){
     writeText((i + 1) + ". " + resources[i], "normal", "#000000", "Montserrat", 40, tvWidth/2 - 100, 300 + v_margin + 80*(i + 0.5))
   }
 }
@@ -746,6 +752,38 @@ function setLeaderboard(){
   let v_margin = 60;
   let h_margin = 60;
 
+  let topUsers = Api.getTopScores();
+  console.log(topUsers);
+  let firstPlace = {
+    user: "None",
+    score: 0
+  }
+  let secondPlace = {
+    user: "None",
+    score: 0
+  }
+  let thirdPlace = {
+    user: "None",
+    score: 0
+  }
+  let fourthPlace = {
+    user: "None",
+    score: 0
+  }
+
+  if(topUsers.length >= 1){
+    firstPlace = topUsers[0]
+  }
+  if(topUsers.length >= 2){
+    secondPlace = topUsers[1]
+  }
+  if(topUsers.length >= 3){
+    thirdPlace = topUsers[2]
+  }
+  if(topUsers.length >= 4){
+    fourthPlace = topUsers[3]
+  }
+  console.log(topUsers.length);
   writeTextCenter("Leaderboard", "bold", "#000000", "Montserrat", 100, tvWidth/2, 120 + v_margin);
 
   drawRectangle((tvWidth/2)-800, 250, 1600, 175, '#FF8AA6');
@@ -755,29 +793,29 @@ function setLeaderboard(){
 
   // First place
   writeText("1", "bold", "#000000", "Montserrat", 150, 280, 330 + v_margin);
-  writeText("PlayerName", "bold", "#000000", "Montserrat", 70, 650, 280 + v_margin);
-  writeText("4847", "bold", "#000000", "Montserrat", 125, 1475, 320 + v_margin);
+  writeText(firstPlace.user, "bold", "#000000", "Montserrat", 70, 400, 280 + v_margin);
+  writeText(firstPlace.score, "bold", "#000000", "Montserrat", 125, 1400, 320 + v_margin);
 
   drawStars(5, "#000000", 450, 385);
 
   // Second place
   writeText("2", "bold", "#000000", "Montserrat", 120, 280, 510 + v_margin);
-  writeText("PlayerName", "bold", "#000000", "Montserrat", 60, 620, 465 + v_margin);
-  writeText("4052", "bold", "#000000", "Montserrat", 115, 1460, 510 + v_margin);
+  writeText(secondPlace.user, "bold", "#000000", "Montserrat", 60, 400, 465 + v_margin);
+  writeText(secondPlace.score, "bold", "#000000", "Montserrat", 115, 1400, 510 + v_margin);
 
   drawStars(5, "#000000", 450, 565);
 
   // Third place
   writeText("3", "bold", "#000000", "Montserrat", 120, 280, 690 + v_margin);
-  writeText("PlayerName", "bold", "#000000", "Montserrat", 60, 620, 640 + v_margin);
-  writeText("3776", "bold", "#000000", "Montserrat", 115, 1460, 685 + v_margin);
+  writeText(thirdPlace.user, "bold", "#000000", "Montserrat", 60, 400, 640 + v_margin);
+  writeText(thirdPlace.score, "bold", "#000000", "Montserrat", 115, 1400, 685 + v_margin);
 
   drawStars(4, "#000000", 450, 740);
 
   // Fourth place
   writeText("4", "bold", "#000000", "Montserrat", 120, 280, 860 + v_margin);
-  writeText("PlayerName", "bold", "#000000", "Montserrat", 60, 620, 810 + v_margin);
-  writeText("2949", "bold", "#000000", "Montserrat", 115, 1460, 860 + v_margin);
+  writeText(fourthPlace.user, "bold", "#000000", "Montserrat", 60, 400, 810 + v_margin);
+  writeText(fourthPlace.score, "bold", "#000000", "Montserrat", 115, 1400, 860 + v_margin);
 
   drawStars(3, "#000000", 450, 910);
 

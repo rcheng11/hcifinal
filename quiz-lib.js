@@ -37,7 +37,7 @@ questions.push(new Question("The principle of hiding the implementation details 
                             1));
 questions.push(new Question("Which of the following is not a fundamental programming paradigm?", 
                              "Object Oriented Programming", 
-                            ["OOP", "Functional Programming", "Declarative Programming", "Imperative Programming"], 
+                            ["OOP", "Functional", "Declarative", "Imperative"], 
                             3));
 questions.push(new Question("Which of the following is not a type of C++ constructor?", 
                              "Object Oriented Programming", 
