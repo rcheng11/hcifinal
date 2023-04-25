@@ -11,7 +11,10 @@ A quiz game for CS majors written in p5.js that gives recommendations and resour
 Our system is an implementation of an interactive quiz that tests users on their knowledge of computer science principles. After indicating that they want to engage with the system, the user will be presented with five technical questions. The user may select an answer from a multiple choice list via the positioning of their hands, with a stopwatch indicating the remaining time. Immediate feedback is given after each question is answered. Upon completion of the quiz, the user is presented with resources and Yale courses they may want to explore based on their answers to the questions. Finally, users are shown a leaderboard and their location on the leaderboard based on randomly assigned usernames. Users are given the option to exit the game at any point.
 
 # Dependencies 
-p5.js and jquery imported via CDN (no installation required). To run locally, copy the full pathname of the index.html file and run it in a Google Chrome browser.
+p5.js and jquery imported via CDN (no installation required). To run locally, copy the full pathname of the index.html file and run it in a Google Chrome browser. Note that if kinect inputs fail, you can still navigate through the program using keyboard equivalents below:
+- Raise arm: "SPACE"
+- Raise Left (EXIT): "E"
+- Right arm up, left, right down respectively: "1", "2", "3", "4"
 
 # Addressed Tasks
 1. Users should be able to test their knowledge of computer science principles through an entertaining quiz.
