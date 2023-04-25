@@ -35,26 +35,102 @@ questions.push(new Question("The principle of hiding the implementation details 
                              "Object Oriented Programming", 
                             ["Inheritance", "Encapsulation", "Polymorphism", "Obstruction"], 
                             1));
+questions.push(new Question("Which of the following is not a fundamental programming paradigm?", 
+                             "Object Oriented Programming", 
+                            ["OOP", "Functional Programming", "Declarative Programming", "Imperative Programming"], 
+                            3));
+questions.push(new Question("Which of the following is not a type of C++ constructor?", 
+                             "Object Oriented Programming", 
+                            ["Default constructor", "Copy constructor", "Friend constructor", "Parameterized constructor"], 
+                            2));
+questions.push(new Question("Which feature of OOP indicates code reusability?", 
+                             "Object Oriented Programming", 
+                            ["Abstraction", "Polymorphism", "Encapsulation", "Inheritance"], 
+                            3));
 questions.push(new Question("Which of the following is not a commonly used language for Web Development?", 
                              "Web Development", 
                             ["Ruby", "Javascript", "C", "Python"], 
                             2));
-questions.push(new Question("You accidentally drop a magnet on your friend’s device. All of his data has been wiped clean. The storage unit of his device was probably a", 
+questions.push(new Question("Which of the following is not a component of the TCP/IP protocol suite?", 
+                             "Web Development", 
+                            ["HTTP", "IP", "TCP", "FTP"], 
+                            0));
+questions.push(new Question("Which of the following is a type of web development framework for building dynamic web applications?", 
+                             "Web Development", 
+                            ["React", "Angular", "Vue", "All of the above"], 
+                            1));
+questions.push(new Question("Which program is used by web clients to view the web pages?", 
+                             "Web Development", 
+                            ["Web browser", "Protocol", "Web server", "Search engine"], 
+                            0));
+questions.push(new Question("You accidentally drop a magnet on your friend's device. All of his data has been wiped clean. The storage unit of his device was probably a", 
                              "Computer Hardware", 
                             ["Solid State Drive", "Hard Disk Drive", "Optical Disk Drive", "Flash Drive"], 
                             0));
+questions.push(new Question("Which of the following is a type of computer memory that is volatile and used for storing data and program instructions temporarily?", 
+                             "Computer Hardware", 
+                            ["ROM", "Flash memory", "Cache", "RAM"], 
+                            3));
+questions.push(new Question("Which of the following is temporary storage used to hold data that is used for arithmetic and logical operations and storing its results?", 
+                             "Computer Hardware", 
+                            ["ALU", "Program Counter", "Accumulator", "Instruction Register"], 
+                            2));
+questions.push(new Question("What is the permanent memory built into your computer called?", 
+                             "Computer Hardware", 
+                            ["RAM", "ROM", "CPU", "CD-ROM"], 
+                            1));
 questions.push(new Question("Which of the following is NOT a relational database?", 
                              "Databases", 
                             ["MySQL", "MongoDB", "Postgres", "SQLite"], 
                             1));
+questions.push(new Question("Which of the following provides the ability to query information from the database and insert tuples into, delete tuples from, and modify tuples in the database?", 
+                             "Databases", 
+                            ["DML", "DDL", "Query", "Relational Schema"], 
+                            0));
+questions.push(new Question("Which of the following SQL commands is used for removing a relation from the database?", 
+                             "Databases", 
+                            ["Delete", "Drop", "Rollback", "Remove"], 
+                            1));
 questions.push(new Question("Your friend made a machine learning program that can write an abstract for a research paper. They tell you it was trained on thousands of articles, providing it with the research paper and the abstract produced. This is an example of what type of learning?", 
-                             "Machine learning", 
+                             "Artificial Intelligence", 
                             ["Supervised", "Unsupervised", "Gaussian", "None of the Above"], 
                             0));
+questions.push(new Question("Which of the following is not a type of artificial neural network?", 
+                             "Artificial Intelligence", 
+                            ["CNN", "RNN", "Multilayer perceptron", "Decision tree"], 
+                            3));
+questions.push(new Question("Which of the following is a type of neural network that is commonly used for image classification?", 
+                             "Artificial Intelligence", 
+                            ["CNN", "RNN", "Multilayer perceptron", "DBN"], 
+                            0));
+questions.push(new Question("Which of the following do we learn using Temporal-Difference learning?", 
+                             "Artificial Intelligence", 
+                            ["Transition model", "Q-Values", "Values", "Reward model"], 
+                            2));
 questions.push(new Question("The efficiency of an algorithm is usually measured by what unit", 
                              "Algorithms", 
                             ["Microsenconds", "# of Declarations", "# of Kilobytes", " # of Operations"], 
                             1));
+questions.push(new Question("The minimum number of edges required to create a cyclic graph of n vertices is", 
+                             "Algorithms", 
+                            ["n", "n - 1", "n + 1", "2n"], 
+                            0));
+questions.push(new Question("What is the maximum number of swaps that can be performed in the Selection Sort algorithm?", 
+                             "Algorithms", 
+                            ["n - 1", "n", "1", "n - 2"], 
+                            0));
+questions.push(new Question("Which of the following is a sorting algorithm that has an average case time complexity of O(n log n)?", 
+                             "Algorithms", 
+                            ["Bubble sort", "Insertion sort", "Quick sort", "Selection sort"], 
+                            2));
+questions.push(new Question("Suppose the numbers 7, 5, 1, 8, 3, 6, 0, 9, 4, 2 are inserted in that order into an initially empty binary search tree. What is the in-order traversal sequence of the resultant tree?", 
+                             "Data structures", 
+                            ["7 5 1 0 3 2 4 6 8 9", "0 2 4 3 1 6 5 9 8 7", "0 1 2 3 4 5 6 7 8 9", "9 8 6 4 2 3 0 1 5 7"], 
+                            2));
+questions.push(new Question("How can we initialize an array in C language?", 
+                             "Data structures", 
+                            ["int arr[2]=(10, 20);", "int arr(2)={10, 20};", "int arr[2] = {10, 20};", "int arr(2) = (10, 20);"], 
+                            2));
 // questions.push(new Question("", 
 //                             "", 
 //                            ["", "", "", ""], 
