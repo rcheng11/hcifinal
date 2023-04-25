@@ -21,7 +21,7 @@ p5.js and jquery imported via CDN (no installation required). To run locally, co
 2. Users should be able to receive feedback about which topics they should review, classes they can take, and how they compare to other students.
 
 # Constraints
-Project uses Kinect skeleton tracking and person detection. Does not account for multiple players in the physical space and selects the first person detected. Project was designed for AKW Floor 3 near the elevator and stairs (HCI TV1), an environment roughly equal to 10ft x 10ft, with a limitation on how close the player can get to detect arm positions (1ft). 
+Project uses Kinect skeleton tracking and person detection. Does not account for multiple players in the physical space and works best when other non-users are not in frame. Project was designed for AKW Floor 3 near the elevator and stairs (HCI TV1), an environment roughly equal to 10ft x 10ft, with a limitation on how close the player can get to detect arm positions (1ft). 
 
 # Collaboration Record
 Deanna DeCarlo dmd226: Worked on sketch.js to develop the frontend states according to the high fidelity prototype, especially including the starting display, instructions, question and question feedback pages, and the leaderboard. Worked on quiz-lib.js to write and include 25 questions for the quiz game. Debugged with Ron.
