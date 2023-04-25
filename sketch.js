@@ -18,7 +18,7 @@ States:
 
 
 // global variables
-var state = 7;
+var state = 0;
 var frameSpeed = 60;
 var tvHeight = 1080;
 var tvWidth = 1920;
@@ -730,7 +730,6 @@ function setRecommendations(){
       default:
     }
   }
-  console.log(classes);
   // questions
   for(var i = 0; i < classes.length; i++){
     writeText((i + 1) + ". " + classes[i], "normal", "#000000", "Montserrat", 40, 65 + h_margin, 300 + v_margin + 80*(i + 0.5))
