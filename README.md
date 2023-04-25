@@ -10,7 +10,7 @@ A quiz game for CS majors written in p5.js that gives recommendations and resour
 
 Our system is an implementation of an interactive quiz that tests users on their knowledge of computer science principles. After indicating that they want to engage with the system, the user will be presented with five technical questions. The user may select an answer from a multiple choice list via the positioning of their hands, with a stopwatch indicating the remaining time. Immediate feedback is given after each question is answered. Upon completion of the quiz, the user is presented with resources and Yale courses they may want to explore based on their answers to the questions. Finally, users are shown a leaderboard and their location on the leaderboard based on randomly assigned usernames. Users are given the option to exit the game at any point.
 
-# Dependencies 
+# Dependencies and Instructions to Run
 p5.js and jquery imported via CDN (no installation required). To run locally, copy the full pathname of the index.html file and run it in a Google Chrome browser. Note that if kinect inputs fail, you can still navigate through the program using keyboard equivalents below:
 - Raise arm: "SPACE"
 - Raise Left (EXIT): "E"
@@ -26,7 +26,7 @@ Project uses Kinect skeleton tracking and person detection. Does not account for
 # Collaboration Record
 Deanna DeCarlo dmd226: Worked on sketch.js to develop the frontend states according to the high fidelity prototype, especially including the starting display, instructions, question and question feedback pages, and the leaderboard. Worked on quiz-lib.js to write and include 25 questions for the quiz game. Debugged with Ron.
 
-Ron Cheng rxc2: Worked on sketch.js and quiz-lib.js to develop the infrastructure to write the front end, including the Quiz, Question, and BarTimer objects. Connected the api.js to the sketch.js files and worked on debugging and creating all states in the quiz game.
+Ron Cheng rxc2: Worked on sketch.js and quiz-lib.js to develop the infrastructure to write the front end, including the Quiz, Question, and BarTimer classes. Connected the api.js to the sketch.js files and created dynamic states of the quiz game (handling storage of user, scores, questions, etc). Debugged with Deanna.
 
 Varun Kumar vk296: Worked on api.js to read the Kinect data and translate it to commands for the quiz. Debugged the Kinect readings with Beixi. Wrote the class structure for the Api for the sketch.js to use. Wrote three questions to use for the quiz and the readme.
 
