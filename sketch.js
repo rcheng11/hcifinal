@@ -13,7 +13,7 @@ States:
 
 
 // global variables
-var state = 7;
+var state = 0;
 var frameSpeed = 30;
 var points = 0;
 var tvHeight = 1080;
