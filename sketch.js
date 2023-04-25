@@ -69,6 +69,7 @@ function draw() {
     directionArr.push(direction);
   }
   armChange = directionArr[0] != directionArr[1];
+  console.log(directionArr);
   console.log(armChange);
   
   switch (state) {
