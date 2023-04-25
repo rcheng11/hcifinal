@@ -159,7 +159,6 @@ class Quiz{
         this.currentIndex = 0;
         this.currentQuestion = this.questions[this.currentIndex];
         this.score = 0;
-        console.log(this)
     }
     nextQuestion(){
         this.currentIndex++;
@@ -206,7 +205,6 @@ class Quiz{
         return this.questions.map(function(question){
             if(question.playerSelection == "None"){
                 return "No answer chosen.";
-                console.log("hi");
             }
             return question.choices[question.playerSelection];
         });

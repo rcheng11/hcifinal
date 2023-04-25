@@ -662,7 +662,6 @@ function setRecommendations(){
   let questionsRaw = quizHandler.questions;
   let classes = [];
   let resources = [];
-  console.log(questionsRaw.length)
   for(let i = 0; i < questionsRaw.length; i++){
     switch (questionsRaw[i].topic){
       case "Object Oriented Programming":
