@@ -6,7 +6,7 @@ Group Members
 - Deanna DeCarlo
 
 # Description
-A quiz game for CS majors written in p5.js that gives recommendations and resources based on user performance. Users are ranked following their completion of the quiz.
+A quiz game for CS majors written in p5.js that gives recommendations and resources based on user performance. Users are ranked following their completion of the quiz. [Link to video demo](https://drive.google.com/file/d/1EQ-7hb_YcVi740Xtllz-H0T-rDyMDOsT/view)
 
 Our system is an implementation of an interactive quiz that tests users on their knowledge of computer science principles. After indicating that they want to engage with the system, the user will be presented with five technical questions. The user may select an answer from a multiple choice list via the positioning of their hands, with a stopwatch indicating the remaining time. Immediate feedback is given after each question is answered. Upon completion of the quiz, the user is presented with resources and Yale courses they may want to explore based on their answers to the questions. Finally, users are shown a leaderboard and their location on the leaderboard based on randomly assigned usernames. Users are given the option to exit the game at any point.
 
